@@ -12,9 +12,12 @@ namespace DataGenerator.Utils
                 throw new ArgumentOutOfRangeException(nameof(args));
 
             string database = args[0];
+            string numberOfData = args[1];
 
             if (!CheckIfFirstArgumentIsCorrectDatabase(database))
                 throw new ArgumentException("Incorrect database!");
+            if(!CheckIfSecondArgumentIsANumber(numberOfData))
+                throw new ArgumentException("Second argument must be a number!");
         }
 
         public static bool CheckIfFirstArgumentIsCorrectDatabase(string arg)
@@ -25,6 +28,13 @@ namespace DataGenerator.Utils
                 .ToLower());
 
             return enums.Contains(arg.ToLower());
+        }
+
+        public static bool CheckIfSecondArgumentIsANumber(string arg)
+        {
+            int num;
+            bool test = int.TryParse(arg, out num);
+            return test;
         }
     }
 }

@@ -73,5 +73,43 @@ namespace DataGenerator.Tests
         public static IEnumerable<object[]> DatabaseTestData => Enum.GetValues(typeof(PossibleDatabases))
                 .Cast<PossibleDatabases>()
                 .Select(e => new object[] { e.ToString().ToLower() });
+
+        [Fact]
+        public void ThrowsExceptionIfSecondArgumentIsNotANumber()
+        {
+            //Arrange
+
+            //Act
+            Action action = () => ArgumentChecker.CheckArguments(new string[] { "Oracle", "asd" });
+
+            //Assert
+            Assert.Throws<ArgumentException>(action);
+            var exception = Record.Exception(action);
+            Assert.Equal("Second argument must be a number!", exception.Message);
+        }
+
+        [Fact]
+        public void ReturnsTrueIfStringValueIsANumber()
+        {
+            //Arrange
+
+            //Act
+            var result = ArgumentChecker.CheckIfSecondArgumentIsANumber("100");
+
+            //Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void ReturnsFalseIfStringValueIsNotANumber()
+        {
+            //Arrange
+
+            //Act
+            var result = ArgumentChecker.CheckIfSecondArgumentIsANumber("asd");
+
+            //Assert
+            Assert.False(result);
+        }
     }
 }
