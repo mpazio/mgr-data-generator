@@ -39,5 +39,19 @@ namespace DataGenerator.Tests
             //Assert
             Assert.Throws<ArgumentOutOfRangeException>(action);
         }
+
+        [Fact]
+        public void ThrowsExceptionIfWrongDatabaseIsPassed()
+        {
+            //Arrange
+
+            //Act
+            Action action = () => ArgumentChecker.CheckArguments(new string[] { "NonExistingDatabase", "1000" });
+
+            //Assert
+            Assert.Throws<ArgumentException>(action);
+            var exception = Record.Exception(action);
+            Assert.Equal("Incorrect database!", exception.Message);
+        }
     }
 }
