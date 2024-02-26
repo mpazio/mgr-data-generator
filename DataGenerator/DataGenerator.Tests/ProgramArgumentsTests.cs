@@ -27,5 +27,17 @@ namespace DataGenerator.Tests
             //Assert
             Assert.Throws<ArgumentNullException>(action);
         }
+
+        [Fact]
+        public void CheckNumberOfArguments()
+        {
+            //Arrange
+
+            //Act
+            Action action = () => ArgumentChecker.CheckArguments(new string[] { "single" });
+
+            //Assert
+            Assert.Throws<ArgumentOutOfRangeException>(action);
+        }
     }
 }
