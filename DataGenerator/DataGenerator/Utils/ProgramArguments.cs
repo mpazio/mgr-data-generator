@@ -2,9 +2,9 @@
 
 namespace DataGenerator.Utils
 {
-    public static class ArgumentChecker
+    public static class ProgramArguments
     {
-        public static void CheckArguments(string[] args)
+        public static void Check(string[] args)
         {
             if (args is null || args.Length < 1)
                 throw new ArgumentNullException(nameof(args));
@@ -14,13 +14,13 @@ namespace DataGenerator.Utils
             string database = args[0];
             string numberOfData = args[1];
 
-            if (!CheckIfFirstArgumentIsCorrectDatabase(database))
+            if (!IsArgumentACorrectDatabase(database))
                 throw new ArgumentException("Incorrect database!");
-            if(!CheckIfSecondArgumentIsANumber(numberOfData))
+            if(!IsSecondArgumentANumber(numberOfData))
                 throw new ArgumentException("Second argument must be a number!");
         }
 
-        public static bool CheckIfFirstArgumentIsCorrectDatabase(string arg)
+        public static bool IsArgumentACorrectDatabase(string arg)
         {
             var enums = Enum.GetValues(typeof(PossibleDatabases))
                 .Cast<PossibleDatabases>()
@@ -30,11 +30,12 @@ namespace DataGenerator.Utils
             return enums.Contains(arg.ToLower());
         }
 
-        public static bool CheckIfSecondArgumentIsANumber(string arg)
+        public static bool IsSecondArgumentANumber(string arg)
         {
             int num;
             bool test = int.TryParse(arg, out num);
             return test;
         }
+
     }
 }

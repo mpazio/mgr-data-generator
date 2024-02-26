@@ -1,3 +1,3 @@
 ﻿using DataGenerator.Utils;
 
-ArgumentChecker.CheckArguments(args);
+ProgramArguments.Check(args);

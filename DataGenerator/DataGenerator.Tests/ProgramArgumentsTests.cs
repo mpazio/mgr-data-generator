@@ -1,7 +1,5 @@
 ﻿using DataGenerator.Databases;
 using DataGenerator.Utils;
-using System.Collections;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataGenerator.Tests
 {
@@ -13,7 +11,7 @@ namespace DataGenerator.Tests
             //Arrange
 
             //Act
-            Action action = () => ArgumentChecker.CheckArguments(null!);
+            Action action = () => ProgramArguments.Check(null!);
 
             //Assert
             Assert.Throws<ArgumentNullException>(action);
@@ -25,7 +23,7 @@ namespace DataGenerator.Tests
             //Arrange
 
             //Act
-            Action action = () => ArgumentChecker.CheckArguments(new string[] { });
+            Action action = () => ProgramArguments.Check(new string[] { });
 
             //Assert
             Assert.Throws<ArgumentNullException>(action);
@@ -37,7 +35,7 @@ namespace DataGenerator.Tests
             //Arrange
 
             //Act
-            Action action = () => ArgumentChecker.CheckArguments(new string[] { "single" });
+            Action action = () => ProgramArguments.Check(new string[] { "single" });
 
             //Assert
             Assert.Throws<ArgumentOutOfRangeException>(action);
@@ -49,7 +47,7 @@ namespace DataGenerator.Tests
             //Arrange
 
             //Act
-            Action action = () => ArgumentChecker.CheckArguments(new string[] { "NonExistingDatabase", "1000" });
+            Action action = () => ProgramArguments.Check(new string[] { "NonExistingDatabase", "1000" });
 
             //Assert
             Assert.Throws<ArgumentException>(action);
@@ -64,7 +62,7 @@ namespace DataGenerator.Tests
             //Arrange
 
             //Act
-            var result = ArgumentChecker.CheckIfFirstArgumentIsCorrectDatabase(database);
+            var result = ProgramArguments.IsArgumentACorrectDatabase(database);
 
             //Assert
             Assert.True(result);
@@ -80,7 +78,7 @@ namespace DataGenerator.Tests
             //Arrange
 
             //Act
-            Action action = () => ArgumentChecker.CheckArguments(new string[] { "Oracle", "asd" });
+            Action action = () => ProgramArguments.Check(new string[] { "Oracle", "asd" });
 
             //Assert
             Assert.Throws<ArgumentException>(action);
@@ -94,7 +92,7 @@ namespace DataGenerator.Tests
             //Arrange
 
             //Act
-            var result = ArgumentChecker.CheckIfSecondArgumentIsANumber("100");
+            var result = ProgramArguments.IsSecondArgumentANumber("100");
 
             //Assert
             Assert.True(result);
@@ -106,7 +104,7 @@ namespace DataGenerator.Tests
             //Arrange
 
             //Act
-            var result = ArgumentChecker.CheckIfSecondArgumentIsANumber("asd");
+            var result = ProgramArguments.IsSecondArgumentANumber("asd");
 
             //Assert
             Assert.False(result);
