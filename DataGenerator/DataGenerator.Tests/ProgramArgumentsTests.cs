@@ -1,4 +1,7 @@
-﻿using DataGenerator.Utils;
+﻿using DataGenerator.Databases;
+using DataGenerator.Utils;
+using System.Collections;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataGenerator.Tests
 {
@@ -53,5 +56,22 @@ namespace DataGenerator.Tests
             var exception = Record.Exception(action);
             Assert.Equal("Incorrect database!", exception.Message);
         }
+
+        [Theory]
+        [MemberData(nameof(DatabaseTestData))]
+        public void ReturnsTrueIfCorrectDatabaseIsPassed(string database)
+        {
+            //Arrange
+
+            //Act
+            var result = ArgumentChecker.CheckIfFirstArgumentIsCorrectDatabase(database);
+
+            //Assert
+            Assert.True(result);
+        }
+
+        public static IEnumerable<object[]> DatabaseTestData => Enum.GetValues(typeof(PossibleDatabases))
+                .Cast<PossibleDatabases>()
+                .Select(e => new object[] { e.ToString().ToLower() });
     }
 }
