@@ -5,6 +5,9 @@ namespace DataGenerator.Tests
 {
     public class ProgramArgumentsTests
     {
+
+        #region NumberOfArguments
+
         [Fact]
         public void RunAppWithNoArguments()
         {
@@ -41,6 +44,11 @@ namespace DataGenerator.Tests
             Assert.Throws<ArgumentOutOfRangeException>(action);
         }
 
+        #endregion
+
+
+        #region IsArgumentACorrectDatabase
+
         [Fact]
         public void ThrowsExceptionIfWrongDatabaseIsPassed()
         {
@@ -71,6 +79,10 @@ namespace DataGenerator.Tests
         public static IEnumerable<object[]> DatabaseTestData => Enum.GetValues(typeof(PossibleDatabases))
                 .Cast<PossibleDatabases>()
                 .Select(e => new object[] { e.ToString().ToLower() });
+
+        #endregion
+
+        #region IsSecondArgumentANumber
 
         [Fact]
         public void ThrowsExceptionIfSecondArgumentIsNotANumber()
@@ -109,5 +121,61 @@ namespace DataGenerator.Tests
             //Assert
             Assert.False(result);
         }
+
+        #endregion
+
+        #region ProgramArguments Getters
+
+        [Fact]
+        public void ReturnsEmptyStringWhenThereAreTooFewArguments()
+        {
+            //Arrange
+            string[] arr = { };
+            //Act
+            var result = ProgramArguments.GetDatabase(arr);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.Equal("", result);
+        }
+
+        [Fact]
+        public void ReturnsFirstValueFromArgumentsArray()
+        {
+            //Arrange
+            string[] arr = { "oracle", "100" };
+            //Act
+            var result = ProgramArguments.GetDatabase(arr);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.Equal("oracle", result);
+        }
+
+        [Fact]
+        public void ReturnsZeroWhenThereAreTooFewArguments()
+        {
+            //Arrange
+            string[] arr = { "oracle"};
+            //Act
+            var result = ProgramArguments.GetNumberOfData(arr);
+
+            //Assert
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void ReturnsSecondValueAsIntFromArgumentsArray()
+        {
+            //Arrange
+            string[] arr = { "oracle", "100" };
+            //Act
+            var result = ProgramArguments.GetNumberOfData(arr);
+
+            //Assert
+            Assert.Equal(100, result);
+        }
+
+        #endregion
     }
 }

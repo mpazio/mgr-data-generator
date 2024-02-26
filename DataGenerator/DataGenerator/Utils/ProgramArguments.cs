@@ -11,7 +11,7 @@ namespace DataGenerator.Utils
             if (args.Length != 2 )
                 throw new ArgumentOutOfRangeException(nameof(args));
 
-            string database = args[0];
+            string database = GetDatabase(args);
             string numberOfData = args[1];
 
             if (!IsArgumentACorrectDatabase(database))
@@ -37,5 +37,17 @@ namespace DataGenerator.Utils
             return test;
         }
 
+        public static string GetDatabase(string[] args)
+        {
+            if (args is null || args.Length < 1) return "";
+            return args[0];
+        }
+
+
+        public static int GetNumberOfData(string[] args)
+        {
+            if (args is null || args.Length < 2) return 0;
+            return int.Parse(args[1]);
+        }
     }
 }
