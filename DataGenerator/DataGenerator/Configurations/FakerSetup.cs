@@ -6,7 +6,7 @@ namespace DataGenerator.Configurations
 {
     public static class FakerSetup
     {
-        public static Faker<User> SetupUser()
+        public static Faker<User> SetupUser(int? seed = null)
         {
             var testOrders = SetupOrder();
             var addresses = SetupAddress();
@@ -23,6 +23,11 @@ namespace DataGenerator.Configurations
                 .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName))
                 .RuleFor(u => u.Orders, f => testOrders.Generate(5).ToList())
                 .RuleFor(u => u.Location, f => locations.Generate(1).First());
+
+            if(seed is not null)
+            {
+                users.UseSeed(seed.Value);
+            }
 
             return users;
         }
