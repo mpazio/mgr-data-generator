@@ -58,5 +58,21 @@ namespace DataGenerator.Tests
             Assert.IsType<Postgres>(insertGenerator.Database);
         }
         #endregion
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-5)]
+        public void ReturnEmptyArrayIfAmountIsLowerThanOne(int amount)
+        {
+            //Arrange
+            InsertGenerator insertGenerator = new InsertGenerator("oracle");
+
+            //Act
+            var result = insertGenerator.GenerateInserts(amount);
+
+            //Assert
+            Assert.True(result.Length < 1);
+        }
     }
 }

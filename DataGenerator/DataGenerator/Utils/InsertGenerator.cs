@@ -1,4 +1,5 @@
-﻿using DataGenerator.Databases;
+﻿using DataGenerator.Configurations;
+using DataGenerator.Databases;
 using System.Text.Json;
 
 namespace DataGenerator.Utils
@@ -25,6 +26,12 @@ namespace DataGenerator.Utils
                     Database = new Oracle();
                     break;
             }
+        }
+
+        public string[] GenerateInserts(int amount)
+        {
+            if (amount < 1) return new string[] { };
+            return null!;
         }
     }
 }
