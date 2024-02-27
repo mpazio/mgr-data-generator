@@ -1,4 +1,6 @@
-﻿using DataGenerator.Configurations;
+﻿using Bogus;
+using DataGenerator.Configurations;
+using DataGenerator.Data;
 using DataGenerator.Databases;
 using System.Text.Json;
 
@@ -28,10 +30,29 @@ namespace DataGenerator.Utils
             }
         }
 
-        public string[] GenerateInserts(int amount)
+        public string[] GenerateInserts(int amount, JsonSerializerOptions options)
         {
             if (amount < 1) return new string[] { };
+
+            var users = FakerSetup.SetupUser();
+            string[] jsons = GenerateJsons(amount, users, options);
+
             return null!;
+        }
+
+        public string[] GenerateJsons(int amount, Faker<User> users, JsonSerializerOptions options)
+        {
+            if (amount < 1) return new string[] { };
+
+            string[] jsons = new string[amount];
+            for (int i = 0; i < amount; i++)
+            {
+                var user = users.Generate();
+                string json = JsonSerializer.Serialize(user, options);
+                jsons[i] = json;
+            }
+
+            return jsons;
         }
     }
 }
