@@ -8,7 +8,6 @@ namespace DataGenerator.Utils
 {
     public class InsertGenerator
     {
-        JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = false, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         public IDatabase Database { get; set; }
         public InsertGenerator(string database)
         {
@@ -37,7 +36,8 @@ namespace DataGenerator.Utils
             var users = FakerSetup.SetupUser();
             string[] jsons = GenerateJsons(amount, users, options);
 
-            return null!;
+            var inserts = Database.GenerateInserts(jsons);
+            return inserts;
         }
 
         public string[] GenerateJsons(int amount, Faker<User> users, JsonSerializerOptions options)
