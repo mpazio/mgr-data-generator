@@ -23,6 +23,9 @@ namespace DataGenerator.Utils
                 case PossibleDatabases.Postgres:
                     Database = new Postgres();
                     break;
+                case PossibleDatabases.MongoDB:
+                    Database = new MongoDB();
+                    break;
                 default:
                     Database = new Oracle();
                     break;
