@@ -4,6 +4,7 @@
     {
         Oracle = 0,
         SqlServer = 1,
-        Postgres = 2
+        Postgres = 2,
+        MongoDB = 3,
     }
 }
