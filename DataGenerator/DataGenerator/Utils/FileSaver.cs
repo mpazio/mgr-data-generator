@@ -4,7 +4,7 @@
     {
         public static async Task Save(string[] querys, string database, string? path = null)
         {
-            string pathWithFileName = $"{path ?? string.Empty}/{database}inserts.txt";
+            string pathWithFileName = $"{path ?? "."}/{database}inserts.txt";
             await File.WriteAllLinesAsync(pathWithFileName, querys);
         }
     }
