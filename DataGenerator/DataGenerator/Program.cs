@@ -9,3 +9,8 @@ JsonSerializerOptions options = new JsonSerializerOptions() {
     WriteIndented = false, 
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase 
 };
+
+var insertGenerator = new InsertGenerator(database);
+var inserts = insertGenerator.GenerateInserts(numberOfData, options);
+
+await FileSaver.Save(inserts, database);
