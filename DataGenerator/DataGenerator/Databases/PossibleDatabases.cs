@@ -6,5 +6,6 @@
         SqlServer = 1,
         Postgres = 2,
         MongoDB = 3,
+        Redis = 4,
     }
 }

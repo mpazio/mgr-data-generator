@@ -26,6 +26,9 @@ namespace DataGenerator.Utils
                 case PossibleDatabases.MongoDB:
                     Database = new MongoDB();
                     break;
+                case PossibleDatabases.Redis:
+                    Database = new Redis();
+                    break;
                 default:
                     Database = new Oracle();
                     break;
