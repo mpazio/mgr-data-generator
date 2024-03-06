@@ -9,7 +9,7 @@ public class Redis : IDatabase
         for (int i = 0; i < jsonValues.Length; i++)
         {
             var json = jsonValues[i];
-            string query = $"JSON.SET {prefixName}:{i}  $ '{json}'";
+            string query = $"JSON.SET {prefixName}:{i+1}  $ '{json}'";
             queries[i] = query;
         }
 
