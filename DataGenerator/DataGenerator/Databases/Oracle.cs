@@ -10,7 +10,7 @@
             for (int i = 0; i < jsonValues.Length; i++)
             {
                 var json = jsonValues[i];
-                string query = $"INSERT INTO {tableName} VALUES (SYS_GUID(), '{json}');";
+                string query = $"INSERT INTO {tableName} VALUES (SYS_GUID(), '{json}')";
                 queries[i] = query;
             }
 
