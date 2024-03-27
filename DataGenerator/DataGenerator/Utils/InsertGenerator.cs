@@ -9,37 +9,28 @@ namespace DataGenerator.Utils
     public class InsertGenerator
     {
         public IDatabase Database { get; set; }
-        public InsertGenerator(string database)
+        public InsertGenerator(PossibleDatabases database)
         {
-            Enum.TryParse(database, true, out PossibleDatabases db);
-            switch (db)
+            // Enum.TryParse(database, true, out PossibleDatabases db);
+            Database = database switch
             {
-                case PossibleDatabases.Oracle:
-                    Database = new Oracle();
-                    break;
-                case PossibleDatabases.SqlServer:
-                    Database = new SqlServer();
-                    break;
-                case PossibleDatabases.Postgres:
-                    Database = new Postgres();
-                    break;
-                case PossibleDatabases.MongoDB:
-                    Database = new MongoDB();
-                    break;
-                case PossibleDatabases.Redis:
-                    Database = new Redis();
-                    break;
-                default:
-                    Database = new Oracle();
-                    break;
-            }
+                PossibleDatabases.Generic => new Generic(),
+                PossibleDatabases.Oracle => new Oracle(),
+                PossibleDatabases.SqlServer => new SqlServer(),
+                PossibleDatabases.Postgres => new Postgres(),
+                PossibleDatabases.MongoDB => new MongoDB(),
+                PossibleDatabases.Redis => new Redis(),
+                PossibleDatabases.Couchbase => new Couchbase(),
+                PossibleDatabases.CouchDb => new CouchDb(),
+                _ => new Generic()
+            };
         }
 
-        public string[] GenerateInserts(int amount, JsonSerializerOptions options)
+        public string[] GenerateInserts(int amount, JsonSerializerOptions options, int seed)
         {
             if (amount < 1) return new string[] { };
 
-            var users = FakerSetup.SetupUser();
+            var users = FakerSetup.SetupUser(seed);
             string[] jsons = GenerateJsons(amount, users, options);
 
             var inserts = Database.GenerateInserts(jsons);
