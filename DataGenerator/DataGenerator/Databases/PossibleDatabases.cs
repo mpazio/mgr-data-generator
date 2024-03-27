@@ -2,10 +2,13 @@
 {
     public enum PossibleDatabases
     {
-        Oracle = 0,
-        SqlServer = 1,
-        Postgres = 2,
-        MongoDB = 3,
-        Redis = 4,
+        Generic,
+        Oracle,
+        SqlServer,
+        Postgres,
+        MongoDB,
+        Redis,
+        Couchbase,
+        CouchDb
     }
 }
