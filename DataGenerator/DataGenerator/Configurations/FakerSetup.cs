@@ -1,5 +1,4 @@
 ﻿using Bogus;
-using Bogus.DataSets;
 using DataGenerator.Data;
 
 namespace DataGenerator.Configurations
@@ -8,9 +7,9 @@ namespace DataGenerator.Configurations
     {
         public static Faker<User> SetupUser(int? seed = null)
         {
-            var testOrders = SetupOrder();
-            var addresses = SetupAddress();
-            var locations = SetupLocation(addresses);
+            var testOrders = SetupOrder(seed);
+            var addresses = SetupAddress(seed);
+            var locations = SetupLocation(addresses, seed);
 
             int userIDs = 1;
             var users = new Faker<User>()
@@ -32,31 +31,53 @@ namespace DataGenerator.Configurations
             return users;
         }
 
-        public static Faker<Order> SetupOrder()
+        public static Faker<Order> SetupOrder(int? seed = null)
         {
             var fruit = new[] { "apple", "banana", "orange", "strawberry", "kiwi" };
             var orderIds = 1;
-            return new Faker<Order>()
+            var orders =  new Faker<Order>()
                 .StrictMode(true)
                 .RuleFor(o => o.OrderId, f => orderIds++)
                 .RuleFor(o => o.Item, f => f.PickRandom(fruit))
                 .RuleFor(o => o.Quantity, f => f.Random.Number(1, 10))
                 .RuleFor(o => o.LotNumber, f => f.Random.Int(0, 100).OrNull(f, .8f));
+            
+            if(seed is not null)
+            {
+                orders.UseSeed(seed.Value);
+            }
+
+            return orders;
         }
 
-        public static Faker<Data.Address> SetupAddress()
+        public static Faker<Data.Address> SetupAddress(int? seed = null)
         {
-            return new Faker<Data.Address>()
+            var addresses =  new Faker<Data.Address>()
+                .StrictMode(true)
                 .RuleFor(e => e.StreetName, f => f.Address.StreetName())
                 .RuleFor(e => e.BuildingNumber, f => f.Address.BuildingNumber());
+
+            if(seed is not null)
+            {
+                addresses.UseSeed(seed.Value);
+            }
+
+            return addresses;
         }
 
-        public static Faker<Location> SetupLocation(Faker<Data.Address> addresses)
+        public static Faker<Location> SetupLocation(Faker<Data.Address> addresses, int? seed = null)
         {
-            return new Faker<Location>()
+            var locations =  new Faker<Location>()
                 .StrictMode(true)
                 .RuleFor(e => e.City, f => f.Address.City())
                 .RuleFor(e => e.Address, f => addresses.Generate(1).First());
+
+            if(seed is not null)
+            {
+                locations.UseSeed(seed.Value);
+            }
+            
+            return locations;
         }
     }
 }
