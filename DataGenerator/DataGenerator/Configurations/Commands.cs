@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
 using CommandDotNet;
+using DataGenerator.Configurations.Quests;
 using DataGenerator.Databases;
 using DataGenerator.Utils;
 
@@ -16,17 +18,60 @@ public class Commands
         [Option('f', "filepath", Description = "Path where inserts file will be created")] 
         string path = ".",
         [Option('s', "seed", Description = "Seed that will be used in Faker")] 
-        int seed = 1
+        int seed = 1,
+        [Option('b', "batch", Description = "Number of batches that inserts are divide")] 
+        int batches = 1,
+        [Option('d', "data", Description = "Number of batches that inserts are divide")] 
+        GeneratedDataTypes dataType = GeneratedDataTypes.Normal
     )
     {
         JsonSerializerOptions options = new JsonSerializerOptions() { 
-            WriteIndented = false, 
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase 
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            WriteIndented = true
         };
 
         var insertGenerator = new InsertGenerator(databases);
-        var inserts = insertGenerator.GenerateInserts(numberOfData, options, seed);
+       
+        
+        int numberOfDataInBatch = numberOfData / batches;
+        int remainder = numberOfData % batches;
 
-        await FileSaver.Save(inserts, databases.ToString(), path);
+        numberOfData = numberOfDataInBatch + remainder;
+        
+        
+        if(dataType == GeneratedDataTypes.Normal)
+            await GenerateUserData(databases, numberOfData, path, seed, batches, insertGenerator, options, numberOfDataInBatch);
+        else 
+            await GeneratePolymorphicDat(databases, numberOfData, path, seed, batches, insertGenerator, options, numberOfDataInBatch);
+            
+    }
+
+    private static async Task GenerateUserData(PossibleDatabases databases, int numberOfData, string path, int seed, int batches,
+        InsertGenerator insertGenerator, JsonSerializerOptions options, int numberOfDataInBatch)
+    {
+        var users = FakerSetup.SetupUser(seed);
+        for (int i = 0; i < batches; i++)
+        {
+            Console.WriteLine(numberOfData);
+            var inserts = insertGenerator.GenerateInsertsInBatches(numberOfData, options, users);
+           
+            await FileSaver.Save(inserts, databases.ToString() + $"_batch{i}_", path);
+            numberOfData = numberOfDataInBatch;
+        }
+    }
+    
+    private static async Task GeneratePolymorphicDat(PossibleDatabases databases, int numberOfData, string path, int seed, int batches,
+        InsertGenerator insertGenerator, JsonSerializerOptions options, int numberOfDataInBatch)
+    {
+        var quests = QuestsFakerSetup.SetupQuest(seed);
+        for (int i = 0; i < batches; i++)
+        {
+            Console.WriteLine(numberOfData);
+            var inserts = insertGenerator.GenerateInsertsInBatchesForPolymorphicData(numberOfData, options, quests);
+           
+            await FileSaver.Save(inserts, databases.ToString() + $"_batch{i}_", path);
+            numberOfData = numberOfDataInBatch;
+        }
     }
 }
